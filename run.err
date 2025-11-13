@@ -1,0 +1,11 @@
+2025-11-10 00:42:29,569 | INFO | __main__ | \U0001f680 Starting bot on port 5001
+2025-11-10 00:42:31,433 | INFO | __main__ | \u2705 Alt bot webhook уже на production: https://image-gen-bot.replit.app/webhook/telegram_alt
+2025-11-10 00:42:31,690 | INFO | __main__ | \U0001f4b8 CryptoBot webhook URL: https://souplike-undepreciated-warren.ngrok-free.dev/webhook/crypto
+2025-11-10 00:42:31,692 | INFO | __main__ | \u2139\ufe0f Configure webhook manually in @CryptoBot -> Crypto Pay -> My Apps -> Webhooks
+2025-11-10 00:42:31,703 | INFO | app.database | Database initialized successfully
+2025-11-10 00:42:31,704 | INFO | __main__ | \u2705 Database initialized
+2025-11-10 00:42:31,999 | INFO | __main__ | \U0001f5d1\ufe0f Old webhook deleted
+2025-11-10 00:42:32,072 | INFO | __main__ | \u2705 Webhook set: https://souplike-undepreciated-warren.ngrok-free.dev/webhook/telegram
+2025-11-10 00:42:32,142 | INFO | __main__ | \U0001f4cb Webhook info: url='https://souplike-undepreciated-warren.ngrok-free.dev/webhook/telegram' has_custom_certificate=False pending_update_count=0 ip_address='3.78.102.143' last_error_date=None last_error_message=None last_synchronization_error_date=None max_connections=40 allowed_updates=['message', 'callback_query', 'pre_checkout_query']
+2025-11-10 00:47:31,177 | INFO | __main__ | \U0001f493 Keep-alive heartbeat
+2025-11-10 00:52:31,188 | INFO | __main__ | \U0001f493 Keep-alive heartbeat
