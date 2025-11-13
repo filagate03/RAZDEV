@@ -1,0 +1,101 @@
+            dispatcher=dp,
+            bot=bot,
+            secret_token=settings.WEBHOOK_SECRET
+        )
+        return await webhook_handler.handle(request)
+    
+    app.router.add_post(settings.WEBHOOK_PATH, telegram_webhook_wrapper)
+    
+    async def image_webhook(request):
+        """Handle image generation webhook from external API"""
+        try:
+            logger.info(f"🎨 Image webhook received from {request.remote}")
+            logger.info(f"Content-Type: {request.content_type}")
+            
+            gen_id = None
+            image_data = None
+            error = None
+            content_type = None
+            
+            # Parse multipart data
+            if 'multipart/form-data' in request.content_type:
+                reader = await request.multipart()
+                async for field in reader:
+                    field_name = field.name
+                    logger.info(f"Field: {field_name}")
+                    
+                    if field_name in ['undressingId', 'id_gen', 'id']:
+                        gen_id = await field.text()
+                        logger.info(f"Generation ID: {gen_id}")
+                    elif field_name == 'image':
+                        image_data = await field.read()
+                        content_type = field.headers.get('Content-Type', 'image/jpeg')
+                        logger.info(f"Media size: {len(image_data)} bytes, type: {content_type}")
+                    elif field_name == 'error':
+                        error = await field.text()
+                        logger.error(f"API Error: {error}")
+                    elif field_name == 'webhook':
+                        webhook_url = await field.text()
+                        logger.info(f"Webhook URL: {webhook_url}")
+            elif 'application/json' in request.content_type:
+                body = await request.read()
+                import json
+                data = json.loads(body)
+                logger.info(f"JSON data: {data}")
+                gen_id = data.get('id_gen') or data.get('undressingId') or data.get('id')
+                error = data.get('error')
+                image_url = data.get('image_url') or data.get('image')
+                if image_url and image_url.startswith('http'):
+                    async with aiohttp.ClientSession() as session:
+                        async with session.get(image_url) as resp:
+                            if resp.status == 200:
+                                image_data = await resp.read()
+            
+            logger.info(f"✅ Parsed: gen_id={gen_id}, has_image={bool(image_data)}, error={error}")
+            
+            if gen_id:
+                async with async_session_maker() as session:
+                    task_repo = GenerationTaskRepository(session)
+                    task = await task_repo.get_by_task_id(gen_id)
+                    
+                    if task:
+                        if image_data:
+                            # Determine file extension based on content type
+                            if content_type and 'video' in content_type:
+                                file_ext = '.mp4'
+                            else:
+                                file_ext = '.jpg'
+                            
+                            file_path = f"/tmp/{gen_id}{file_ext}"
+                            with open(file_path, 'wb') as f:
+                                f.write(image_data)
+                            
+                            await task_repo.update_status(
+                                task_id=gen_id,
+                                status="completed",
+                                result_url=file_path
+                            )
+                            
+                            from app.repositories import UserRepository
+                            user_repo = UserRepository(session)
+                            user = await session.get(User, task.user_id)
+                            
+                            if user:
+                                await send_generation_result(
+                                    bot=bot,
+                                    task_id=gen_id,
+                                    user_chat_id=int(user.chat_id),
+                                    result_url=file_path
+                                )
+                            
+                            logger.info(f"✅ Generation completed: {gen_id}")
+                        elif error:
+                            await task_repo.update_status(
+                                task_id=gen_id,
+                                status="failed",
+                                error_message=error
+                            )
+                            
+                            from app.repositories import UserRepository
+                            user_repo = UserRepository(session)
+                            user = await session.get(User, task.user_id)
