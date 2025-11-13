@@ -1,0 +1,72 @@
+По скринам вижу несколько потенциальных проблем с деплоем твоего бота на Replit:
+
+### Основная проблема — порты
+
+На 4-м скриншоте видно, что у тебя сконфигурированы **порты 80, 3000, 3001, 3002, 3003**, но порты 3000-3003 помечены **красными крестиками**. Это значит, что Replit не может их пробросить. Скорее всего, твой код пытается слушать на нескольких портах одновременно, а Replit этого не поддерживает в таком виде.[1][2]
+
+### Что делать:
+
+**1. Убери лишние порты**
+
+Телеграм-боту вообще не нужны внешние порты, если ты используешь polling (long polling). Если у тебя webhook — нужен только один порт (обычно 80 или 443).[2]
+
+**2. Проверь тип приложения**
+
+На последнем скрине вижу выбор между "Web Server" и "Background Worker". Для Telegram бота **выбирай Background Worker**, потому что боту не нужен HTTP-сервер, если ты на polling.[3][4]
+
+**3. Настройки для webhook (если используешь)**
+
+Если у тебя webhook, оставь только:
+- Порт 80 (или тот, что слушает твой код)
+- App type: Web Server
+- Убери все остальные порты из конфига[2]
+
+**4. Проверь переменные окружения**
+
+На скринах видно кучу секретов (BOT_TOKEN, ADMINS и т.д.). Убедись, что:[5][6]
+- BOT_TOKEN правильный
+- Все переменные доступны в production environment
+- Нет опечаток в названиях
+
+**5. Быстрый фикс**
+
+Попробуй:
+```bash
+kill 1
+```
+в Shell Replit — это перезагрузит VM и очистит зависшие процессы.[7][8]
+
+**6. Радикальный метод**
+
+Если ничего не помогло — удали деплоймент полностью и создай заново. Судя по Reddit, это помогает в ~70% случаев, когда порты глючат.[9]
+
+### Что еще проверить:
+
+- В логах (вкладка Logs) должны быть конкретные ошибки — покажи их, если есть[10]
+- Build command: `pip install -r requirements.txt` выглядит норм[5]
+- Run command: `python main.py` — проверь, что файл называется именно так[5]
+
+### VM конфиг:
+
+0.5 vCPU / 2GB RAM за $20/месяц — это Reserved VM. Для бота норм, но если платишь — требуй чтобы работало стабильно.[10][2]
+
+Скинь текст ошибки из вкладки Logs — там точно будет написано, что именно свалилось при запуске. Без логов гадать сложнее.
+
+Источники
+[1] image.jpeg https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/images/62577848/7dc22b1f-d691-44b8-b08d-5f3705732bfe/image.jpeg?AWSAccessKeyId=ASIA2F3EMEYEZI7KXF7Y&Signature=OkBuS5suDCEjtO%2BUAgEzi1y1m30%3D&x-amz-security-token=IQoJb3JpZ2luX2VjEDUaCXVzLWVhc3QtMSJHMEUCIQDVV918QYBf17%2Bu9D8Ka21IIjmFIqsvFqroDyaZMzwHvgIgWCmdp4cAk9KO4oq%2F1U1EtpevmTSDChuUnBuLKdd%2F5roq%2FAQI7v%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FARABGgw2OTk3NTMzMDk3MDUiDAy8ZIfVDDHkyaIx%2FyrQBGXHSnb%2Bx804QlrPJ5B3ocKzCLxlNXQ09o9atDqJAcCdVHAga6JPiylgoH12NPa%2Fm0PEfk60foObuPxB3RICqJbSjrOaMs0PRZY7k5wOzqLD5auIy2HMk1doZIpY%2B5xBn80K9JYPmasHl3VTVt7a0IInARe3f4FFX2cdElUBHeHcHaesN%2BARymUKAxACma06Rh1fqp5XFZSR2h5ejeTwRQ4MM8t9wYrJTZjlaDusIcOMtckyaodWOPd9ZsusK1emLjn4q7wcFc7Lc7MZdrQbKB4ZWeHeASWE2Oqgv1RVt7ElC2BgRobi2PnQ8aWqDSiidOihiFs6BCDo%2BZdtknpv9VQ%2FSHfeup9lY7G2UhQqS0JZh12ff8GLoMsLZ0mdqM8Zs8LKP76QsY5OHqpC%2FxBYwJc6sp3tssA%2Bc3UppW7DxBovRK36Jy05gmtxv7P2kVK2rHxVEyR2kCaD9FGElUFfpuLRmt7YRFv3t3EdTw3QaiQaa6RypVnjgsPY7u8vgzewTAG9blo8IMj5wbebTpuXzoRRAP8jRcthQLMxlS94ts0TvToxPXkMvrnI7Igsfbeo2CC3bv%2FCbjrbSH%2Frhv%2FjGtSsBaiCqeal%2FFLOfSe1vTyMaGatpAc7as1%2BpQ%2F6OnwfaTh1T3aMJMZznGB7E9dV6Tl8skrJJcD9T2UDMcpGrON7VBCOSJIQiBmxRa9ozioFdjwLeqB%2Bosp8RS1ePNo24QRHayPph87DTMY9XnuTQHOuM4K1OT%2FPqDyjQbmY1jNAEJp6fSk3%2BrGonjrX73kLjqgwsLmNyAY6mAGRHhzm3qd2NI6inAvlcWcYGJBZH6rL4KfGCwyEh1kdHk78%2FAkkfMKeTu2heEAe%2B%2FBwinGgAWwvVVou5cyhGkFPPtnsPPI1iGIUFwjn62R5Sw6opSNf%2F3ayDqj1G3GBxNgWRmUkLI7RDy19LFilC7%2FrMD22f30nyPQwpXDDZa1N5Nfj87atk2ysa65HeT0awmuaEjGbTqN%2F4w%3D%3D&Expires=1761830394
+[2] Ports - Replit Docs https://docs.replit.com/replit-workspace/ports
+[3] image.jpeg https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/images/62577848/8b489fec-4a17-4b45-8bd7-65a02366d78c/image.jpeg?AWSAccessKeyId=ASIA2F3EMEYEZI7KXF7Y&Signature=PsfWx7Kn%2F29pClDFtSzriz8sdUs%3D&x-amz-security-token=IQoJb3JpZ2luX2VjEDUaCXVzLWVhc3QtMSJHMEUCIQDVV918QYBf17%2Bu9D8Ka21IIjmFIqsvFqroDyaZMzwHvgIgWCmdp4cAk9KO4oq%2F1U1EtpevmTSDChuUnBuLKdd%2F5roq%2FAQI7v%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FARABGgw2OTk3NTMzMDk3MDUiDAy8ZIfVDDHkyaIx%2FyrQBGXHSnb%2Bx804QlrPJ5B3ocKzCLxlNXQ09o9atDqJAcCdVHAga6JPiylgoH12NPa%2Fm0PEfk60foObuPxB3RICqJbSjrOaMs0PRZY7k5wOzqLD5auIy2HMk1doZIpY%2B5xBn80K9JYPmasHl3VTVt7a0IInARe3f4FFX2cdElUBHeHcHaesN%2BARymUKAxACma06Rh1fqp5XFZSR2h5ejeTwRQ4MM8t9wYrJTZjlaDusIcOMtckyaodWOPd9ZsusK1emLjn4q7wcFc7Lc7MZdrQbKB4ZWeHeASWE2Oqgv1RVt7ElC2BgRobi2PnQ8aWqDSiidOihiFs6BCDo%2BZdtknpv9VQ%2FSHfeup9lY7G2UhQqS0JZh12ff8GLoMsLZ0mdqM8Zs8LKP76QsY5OHqpC%2FxBYwJc6sp3tssA%2Bc3UppW7DxBovRK36Jy05gmtxv7P2kVK2rHxVEyR2kCaD9FGElUFfpuLRmt7YRFv3t3EdTw3QaiQaa6RypVnjgsPY7u8vgzewTAG9blo8IMj5wbebTpuXzoRRAP8jRcthQLMxlS94ts0TvToxPXkMvrnI7Igsfbeo2CC3bv%2FCbjrbSH%2Frhv%2FjGtSsBaiCqeal%2FFLOfSe1vTyMaGatpAc7as1%2BpQ%2F6OnwfaTh1T3aMJMZznGB7E9dV6Tl8skrJJcD9T2UDMcpGrON7VBCOSJIQiBmxRa9ozioFdjwLeqB%2Bosp8RS1ePNo24QRHayPph87DTMY9XnuTQHOuM4K1OT%2FPqDyjQbmY1jNAEJp6fSk3%2BrGonjrX73kLjqgwsLmNyAY6mAGRHhzm3qd2NI6inAvlcWcYGJBZH6rL4KfGCwyEh1kdHk78%2FAkkfMKeTu2heEAe%2B%2FBwinGgAWwvVVou5cyhGkFPPtnsPPI1iGIUFwjn62R5Sw6opSNf%2F3ayDqj1G3GBxNgWRmUkLI7RDy19LFilC7%2FrMD22f30nyPQwpXDDZa1N5Nfj87atk2ysa65HeT0awmuaEjGbTqN%2F4w%3D%3D&Expires=1761830394
+[4] Advanced port configuration - Replit Blog https://blog.replit.com/ports
+[5] image.jpeg https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/images/62577848/421f6841-2ddc-4e1f-8cc8-c5cd9084aa6d/image.jpeg?AWSAccessKeyId=ASIA2F3EMEYEZI7KXF7Y&Signature=dx9dT9UV2T85OKN49pYMQpDa45E%3D&x-amz-security-token=IQoJb3JpZ2luX2VjEDUaCXVzLWVhc3QtMSJHMEUCIQDVV918QYBf17%2Bu9D8Ka21IIjmFIqsvFqroDyaZMzwHvgIgWCmdp4cAk9KO4oq%2F1U1EtpevmTSDChuUnBuLKdd%2F5roq%2FAQI7v%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FARABGgw2OTk3NTMzMDk3MDUiDAy8ZIfVDDHkyaIx%2FyrQBGXHSnb%2Bx804QlrPJ5B3ocKzCLxlNXQ09o9atDqJAcCdVHAga6JPiylgoH12NPa%2Fm0PEfk60foObuPxB3RICqJbSjrOaMs0PRZY7k5wOzqLD5auIy2HMk1doZIpY%2B5xBn80K9JYPmasHl3VTVt7a0IInARe3f4FFX2cdElUBHeHcHaesN%2BARymUKAxACma06Rh1fqp5XFZSR2h5ejeTwRQ4MM8t9wYrJTZjlaDusIcOMtckyaodWOPd9ZsusK1emLjn4q7wcFc7Lc7MZdrQbKB4ZWeHeASWE2Oqgv1RVt7ElC2BgRobi2PnQ8aWqDSiidOihiFs6BCDo%2BZdtknpv9VQ%2FSHfeup9lY7G2UhQqS0JZh12ff8GLoMsLZ0mdqM8Zs8LKP76QsY5OHqpC%2FxBYwJc6sp3tssA%2Bc3UppW7DxBovRK36Jy05gmtxv7P2kVK2rHxVEyR2kCaD9FGElUFfpuLRmt7YRFv3t3EdTw3QaiQaa6RypVnjgsPY7u8vgzewTAG9blo8IMj5wbebTpuXzoRRAP8jRcthQLMxlS94ts0TvToxPXkMvrnI7Igsfbeo2CC3bv%2FCbjrbSH%2Frhv%2FjGtSsBaiCqeal%2FFLOfSe1vTyMaGatpAc7as1%2BpQ%2F6OnwfaTh1T3aMJMZznGB7E9dV6Tl8skrJJcD9T2UDMcpGrON7VBCOSJIQiBmxRa9ozioFdjwLeqB%2Bosp8RS1ePNo24QRHayPph87DTMY9XnuTQHOuM4K1OT%2FPqDyjQbmY1jNAEJp6fSk3%2BrGonjrX73kLjqgwsLmNyAY6mAGRHhzm3qd2NI6inAvlcWcYGJBZH6rL4KfGCwyEh1kdHk78%2FAkkfMKeTu2heEAe%2B%2FBwinGgAWwvVVou5cyhGkFPPtnsPPI1iGIUFwjn62R5Sw6opSNf%2F3ayDqj1G3GBxNgWRmUkLI7RDy19LFilC7%2FrMD22f30nyPQwpXDDZa1N5Nfj87atk2ysa65HeT0awmuaEjGbTqN%2F4w%3D%3D&Expires=1761830394
+[6] image.jpeg https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/images/62577848/5e1b4c06-36ac-47d3-80b0-2dbadb8398ec/image.jpeg?AWSAccessKeyId=ASIA2F3EMEYEZI7KXF7Y&Signature=dfg7M1vm%2FPa6uRzDwhc5qWcppTQ%3D&x-amz-security-token=IQoJb3JpZ2luX2VjEDUaCXVzLWVhc3QtMSJHMEUCIQDVV918QYBf17%2Bu9D8Ka21IIjmFIqsvFqroDyaZMzwHvgIgWCmdp4cAk9KO4oq%2F1U1EtpevmTSDChuUnBuLKdd%2F5roq%2FAQI7v%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FARABGgw2OTk3NTMzMDk3MDUiDAy8ZIfVDDHkyaIx%2FyrQBGXHSnb%2Bx804QlrPJ5B3ocKzCLxlNXQ09o9atDqJAcCdVHAga6JPiylgoH12NPa%2Fm0PEfk60foObuPxB3RICqJbSjrOaMs0PRZY7k5wOzqLD5auIy2HMk1doZIpY%2B5xBn80K9JYPmasHl3VTVt7a0IInARe3f4FFX2cdElUBHeHcHaesN%2BARymUKAxACma06Rh1fqp5XFZSR2h5ejeTwRQ4MM8t9wYrJTZjlaDusIcOMtckyaodWOPd9ZsusK1emLjn4q7wcFc7Lc7MZdrQbKB4ZWeHeASWE2Oqgv1RVt7ElC2BgRobi2PnQ8aWqDSiidOihiFs6BCDo%2BZdtknpv9VQ%2FSHfeup9lY7G2UhQqS0JZh12ff8GLoMsLZ0mdqM8Zs8LKP76QsY5OHqpC%2FxBYwJc6sp3tssA%2Bc3UppW7DxBovRK36Jy05gmtxv7P2kVK2rHxVEyR2kCaD9FGElUFfpuLRmt7YRFv3t3EdTw3QaiQaa6RypVnjgsPY7u8vgzewTAG9blo8IMj5wbebTpuXzoRRAP8jRcthQLMxlS94ts0TvToxPXkMvrnI7Igsfbeo2CC3bv%2FCbjrbSH%2Frhv%2FjGtSsBaiCqeal%2FFLOfSe1vTyMaGatpAc7as1%2BpQ%2F6OnwfaTh1T3aMJMZznGB7E9dV6Tl8skrJJcD9T2UDMcpGrON7VBCOSJIQiBmxRa9ozioFdjwLeqB%2Bosp8RS1ePNo24QRHayPph87DTMY9XnuTQHOuM4K1OT%2FPqDyjQbmY1jNAEJp6fSk3%2BrGonjrX73kLjqgwsLmNyAY6mAGRHhzm3qd2NI6inAvlcWcYGJBZH6rL4KfGCwyEh1kdHk78%2FAkkfMKeTu2heEAe%2B%2FBwinGgAWwvVVou5cyhGkFPPtnsPPI1iGIUFwjn62R5Sw6opSNf%2F3ayDqj1G3GBxNgWRmUkLI7RDy19LFilC7%2FrMD22f30nyPQwpXDDZa1N5Nfj87atk2ysa65HeT0awmuaEjGbTqN%2F4w%3D%3D&Expires=1761830394
+[7] We couldn't reach this Repl Make sure this Repl has a port open and ... https://stackoverflow.com/questions/78649476/we-couldnt-reach-this-repl-make-sure-this-repl-has-a-port-open-and-is-ready-to
+[8] Replit Agents Technical FAQ: Solving Common Setup and Coding ... https://www.sidetool.co/post/replit-agents-technical-faq-solving-common-setup-and-coding-challenges/
+[9] 25 builds failed and counting - Replit Community Forum - Discourse https://replit.discourse.group/t/25-builds-failed-and-counting/1676
+[10] image.jpeg https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/images/62577848/b7c91ab1-119c-4c79-b6b6-5bf1299dc6b7/image.jpeg?AWSAccessKeyId=ASIA2F3EMEYEZI7KXF7Y&Signature=kLhf9IqITWq%2B5q7JJLP5ch1ZnC8%3D&x-amz-security-token=IQoJb3JpZ2luX2VjEDUaCXVzLWVhc3QtMSJHMEUCIQDVV918QYBf17%2Bu9D8Ka21IIjmFIqsvFqroDyaZMzwHvgIgWCmdp4cAk9KO4oq%2F1U1EtpevmTSDChuUnBuLKdd%2F5roq%2FAQI7v%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FARABGgw2OTk3NTMzMDk3MDUiDAy8ZIfVDDHkyaIx%2FyrQBGXHSnb%2Bx804QlrPJ5B3ocKzCLxlNXQ09o9atDqJAcCdVHAga6JPiylgoH12NPa%2Fm0PEfk60foObuPxB3RICqJbSjrOaMs0PRZY7k5wOzqLD5auIy2HMk1doZIpY%2B5xBn80K9JYPmasHl3VTVt7a0IInARe3f4FFX2cdElUBHeHcHaesN%2BARymUKAxACma06Rh1fqp5XFZSR2h5ejeTwRQ4MM8t9wYrJTZjlaDusIcOMtckyaodWOPd9ZsusK1emLjn4q7wcFc7Lc7MZdrQbKB4ZWeHeASWE2Oqgv1RVt7ElC2BgRobi2PnQ8aWqDSiidOihiFs6BCDo%2BZdtknpv9VQ%2FSHfeup9lY7G2UhQqS0JZh12ff8GLoMsLZ0mdqM8Zs8LKP76QsY5OHqpC%2FxBYwJc6sp3tssA%2Bc3UppW7DxBovRK36Jy05gmtxv7P2kVK2rHxVEyR2kCaD9FGElUFfpuLRmt7YRFv3t3EdTw3QaiQaa6RypVnjgsPY7u8vgzewTAG9blo8IMj5wbebTpuXzoRRAP8jRcthQLMxlS94ts0TvToxPXkMvrnI7Igsfbeo2CC3bv%2FCbjrbSH%2Frhv%2FjGtSsBaiCqeal%2FFLOfSe1vTyMaGatpAc7as1%2BpQ%2F6OnwfaTh1T3aMJMZznGB7E9dV6Tl8skrJJcD9T2UDMcpGrON7VBCOSJIQiBmxRa9ozioFdjwLeqB%2Bosp8RS1ePNo24QRHayPph87DTMY9XnuTQHOuM4K1OT%2FPqDyjQbmY1jNAEJp6fSk3%2BrGonjrX73kLjqgwsLmNyAY6mAGRHhzm3qd2NI6inAvlcWcYGJBZH6rL4KfGCwyEh1kdHk78%2FAkkfMKeTu2heEAe%2B%2FBwinGgAWwvVVou5cyhGkFPPtnsPPI1iGIUFwjn62R5Sw6opSNf%2F3ayDqj1G3GBxNgWRmUkLI7RDy19LFilC7%2FrMD22f30nyPQwpXDDZa1N5Nfj87atk2ysa65HeT0awmuaEjGbTqN%2F4w%3D%3D&Expires=1761830394
+[11] image.jpeg https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/images/62577848/886d9a21-c4c6-4115-a52a-55a7fa4c44a0/image.jpeg?AWSAccessKeyId=ASIA2F3EMEYEZI7KXF7Y&Signature=Vj7Ioi0rDffWMKJl%2B7bQbBIiTFQ%3D&x-amz-security-token=IQoJb3JpZ2luX2VjEDUaCXVzLWVhc3QtMSJHMEUCIQDVV918QYBf17%2Bu9D8Ka21IIjmFIqsvFqroDyaZMzwHvgIgWCmdp4cAk9KO4oq%2F1U1EtpevmTSDChuUnBuLKdd%2F5roq%2FAQI7v%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FARABGgw2OTk3NTMzMDk3MDUiDAy8ZIfVDDHkyaIx%2FyrQBGXHSnb%2Bx804QlrPJ5B3ocKzCLxlNXQ09o9atDqJAcCdVHAga6JPiylgoH12NPa%2Fm0PEfk60foObuPxB3RICqJbSjrOaMs0PRZY7k5wOzqLD5auIy2HMk1doZIpY%2B5xBn80K9JYPmasHl3VTVt7a0IInARe3f4FFX2cdElUBHeHcHaesN%2BARymUKAxACma06Rh1fqp5XFZSR2h5ejeTwRQ4MM8t9wYrJTZjlaDusIcOMtckyaodWOPd9ZsusK1emLjn4q7wcFc7Lc7MZdrQbKB4ZWeHeASWE2Oqgv1RVt7ElC2BgRobi2PnQ8aWqDSiidOihiFs6BCDo%2BZdtknpv9VQ%2FSHfeup9lY7G2UhQqS0JZh12ff8GLoMsLZ0mdqM8Zs8LKP76QsY5OHqpC%2FxBYwJc6sp3tssA%2Bc3UppW7DxBovRK36Jy05gmtxv7P2kVK2rHxVEyR2kCaD9FGElUFfpuLRmt7YRFv3t3EdTw3QaiQaa6RypVnjgsPY7u8vgzewTAG9blo8IMj5wbebTpuXzoRRAP8jRcthQLMxlS94ts0TvToxPXkMvrnI7Igsfbeo2CC3bv%2FCbjrbSH%2Frhv%2FjGtSsBaiCqeal%2FFLOfSe1vTyMaGatpAc7as1%2BpQ%2F6OnwfaTh1T3aMJMZznGB7E9dV6Tl8skrJJcD9T2UDMcpGrON7VBCOSJIQiBmxRa9ozioFdjwLeqB%2Bosp8RS1ePNo24QRHayPph87DTMY9XnuTQHOuM4K1OT%2FPqDyjQbmY1jNAEJp6fSk3%2BrGonjrX73kLjqgwsLmNyAY6mAGRHhzm3qd2NI6inAvlcWcYGJBZH6rL4KfGCwyEh1kdHk78%2FAkkfMKeTu2heEAe%2B%2FBwinGgAWwvVVou5cyhGkFPPtnsPPI1iGIUFwjn62R5Sw6opSNf%2F3ayDqj1G3GBxNgWRmUkLI7RDy19LFilC7%2FrMD22f30nyPQwpXDDZa1N5Nfj87atk2ysa65HeT0awmuaEjGbTqN%2F4w%3D%3D&Expires=1761830394
+[12] image.jpeg https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/images/62577848/9783ca61-78f2-4c7c-b0c4-b0ce6244a492/image.jpeg?AWSAccessKeyId=ASIA2F3EMEYEZI7KXF7Y&Signature=q%2B%2FMW%2FEaSMZXQkTuquq2ebXrGMc%3D&x-amz-security-token=IQoJb3JpZ2luX2VjEDUaCXVzLWVhc3QtMSJHMEUCIQDVV918QYBf17%2Bu9D8Ka21IIjmFIqsvFqroDyaZMzwHvgIgWCmdp4cAk9KO4oq%2F1U1EtpevmTSDChuUnBuLKdd%2F5roq%2FAQI7v%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FARABGgw2OTk3NTMzMDk3MDUiDAy8ZIfVDDHkyaIx%2FyrQBGXHSnb%2Bx804QlrPJ5B3ocKzCLxlNXQ09o9atDqJAcCdVHAga6JPiylgoH12NPa%2Fm0PEfk60foObuPxB3RICqJbSjrOaMs0PRZY7k5wOzqLD5auIy2HMk1doZIpY%2B5xBn80K9JYPmasHl3VTVt7a0IInARe3f4FFX2cdElUBHeHcHaesN%2BARymUKAxACma06Rh1fqp5XFZSR2h5ejeTwRQ4MM8t9wYrJTZjlaDusIcOMtckyaodWOPd9ZsusK1emLjn4q7wcFc7Lc7MZdrQbKB4ZWeHeASWE2Oqgv1RVt7ElC2BgRobi2PnQ8aWqDSiidOihiFs6BCDo%2BZdtknpv9VQ%2FSHfeup9lY7G2UhQqS0JZh12ff8GLoMsLZ0mdqM8Zs8LKP76QsY5OHqpC%2FxBYwJc6sp3tssA%2Bc3UppW7DxBovRK36Jy05gmtxv7P2kVK2rHxVEyR2kCaD9FGElUFfpuLRmt7YRFv3t3EdTw3QaiQaa6RypVnjgsPY7u8vgzewTAG9blo8IMj5wbebTpuXzoRRAP8jRcthQLMxlS94ts0TvToxPXkMvrnI7Igsfbeo2CC3bv%2FCbjrbSH%2Frhv%2FjGtSsBaiCqeal%2FFLOfSe1vTyMaGatpAc7as1%2BpQ%2F6OnwfaTh1T3aMJMZznGB7E9dV6Tl8skrJJcD9T2UDMcpGrON7VBCOSJIQiBmxRa9ozioFdjwLeqB%2Bosp8RS1ePNo24QRHayPph87DTMY9XnuTQHOuM4K1OT%2FPqDyjQbmY1jNAEJp6fSk3%2BrGonjrX73kLjqgwsLmNyAY6mAGRHhzm3qd2NI6inAvlcWcYGJBZH6rL4KfGCwyEh1kdHk78%2FAkkfMKeTu2heEAe%2B%2FBwinGgAWwvVVou5cyhGkFPPtnsPPI1iGIUFwjn62R5Sw6opSNf%2F3ayDqj1G3GBxNgWRmUkLI7RDy19LFilC7%2FrMD22f30nyPQwpXDDZa1N5Nfj87atk2ysa65HeT0awmuaEjGbTqN%2F4w%3D%3D&Expires=1761830394
+[13] Replit App Won't Deploy - Reddit https://www.reddit.com/r/replit/comments/1kdhdn2/replit_app_wont_deploy/
+[14] Port opening issues : r/replit - Reddit https://www.reddit.com/r/replit/comments/1j0w5ve/port_opening_issues/
+[15] Replit Agent Stuck or Not Working? Quick Fixes That ... https://www.sidetool.co/post/replit-agent-stuck-quick-fixes-2025/
+[16] Going crazy with port & code problems - HELP! - Agent & Assistant https://replit.discourse.group/t/going-crazy-with-port-code-problems-help/3403
+[17] Discord Bot Stops Working After One Hour When Deployed ... https://community.latenode.com/t/discord-bot-stops-working-after-one-hour-when-deployed-on-replit/24874
