@@ -1,0 +1,67 @@
+modules = ["python-3.11", "postgresql-16"]
+[agent]
+expertMode = true
+
+[nix]
+channel = "stable-25_05"
+
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Telegram Bot"
+
+[[workflows.workflow]]
+name = "Telegram Bot"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python main.py"
+waitForPort = 5000
+
+[workflows.workflow.metadata]
+outputType = "webview"
+
+[[ports]]
+localPort = 5000
+externalPort = 80
+
+[[ports]]
+localPort = 38629
+externalPort = 5000
+
+[[ports]]
+localPort = 38749
+externalPort = 3002
+
+[[ports]]
+localPort = 41731
+externalPort = 3003
+
+[[ports]]
+localPort = 42287
+externalPort = 4200
+
+[[ports]]
+localPort = 43275
+externalPort = 5173
+
+[[ports]]
+localPort = 45119
+externalPort = 3001
+
+[[ports]]
+localPort = 46665
+externalPort = 3000
+
+[deployment]
+deploymentTarget = "vm"
+run = ["python", "main.py"]
+build = ["pip", "install", "-r", "requirements.txt"]
