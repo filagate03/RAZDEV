@@ -1,0 +1,55 @@
+10-30 17:33:51
+2025-10-30 14:33:51,551 | INFO | aiohttp.access | 127.0.0.1 [30/Oct/2025:14:33:51 +0000] "POST /webhook/telegram HTTP/1.1" 200 159 "-" "-"
+10-30 17:33:51
+2025-10-30 14:33:51,552 | INFO | __main__ | Unhandled message from 742200799: 💎 Баланс
+10-30 17:33:51
+2025-10-30 14:33:51,552 | INFO | aiogram.event | Update id=126042341 is handled. Duration 0 ms by bot id=8162439685
+10-30 17:33:51
+2025-10-30 14:33:51,697 | INFO | __main__ | 📥 Incoming webhook request from 127.0.0.1
+10-30 17:33:51
+2025-10-30 14:33:51,698 | INFO | __main__ | Headers: {'Host': 'image-gen-bot.replit.app', 'Content-Length': '503', 'Accept-Encoding': 'gzip, deflate', 'Content-Type': 'application/json', 'Server-Timing': 'depproxy;dur=1761834831691', 'Via': '1.1 google', 'X-Cloud-Trace-Context': '39aee921ff6c7902cf9b6d6b7d9ca4cd/12572226733953055796', 'X-Forwarded-For': '91.108.5.110, 34.117.33.233, 35.191.77.250', 'X-Forwarded-Host': 'image-gen-bot.replit.app', 'X-Forwarded-Proto': 'https', 'X-Replit-User-Bio': '', 'X-Replit-User-Id': '', 'X-Replit-User-Name': '', 'X-Replit-User-Profile-Image': '', 'X-Replit-User-Roles': '', 'X-Replit-User-Teams': '', 'X-Replit-User-Url': '', 'X-Telegram-Bot-Api-Secret-Token': 'Zx9K4mP2vN8qR5tY3wL7uH1jC6fG0bS8'}
+10-30 17:33:51
+2025-10-30 14:33:51,698 | INFO | __main__ | Body size: 503 bytes
+10-30 17:33:51
+2025-10-30 14:33:51,698 | INFO | aiohttp.access | 127.0.0.1 [30/Oct/2025:14:33:51 +0000] "POST /webhook/telegram HTTP/1.1" 200 159 "-" "-"
+10-30 17:33:51
+2025-10-30 14:33:51,699 | INFO | __main__ | Unhandled message from 742200799: 🎨 Генерация
+10-30 17:33:51
+2025-10-30 14:33:51,699 | INFO | aiogram.event | Update id=126042342 is handled. Duration 0 ms by bot id=8162439685
+10-30 17:33:51
+2025-10-30 14:33:51,846 | INFO | __main__ | 📥 Incoming webhook request from 127.0.0.1
+10-30 17:33:51
+2025-10-30 14:33:51,846 | INFO | __main__ | Headers: {'Host': 'image-gen-bot.replit.app', 'Content-Length': '485', 'Accept-Encoding': 'gzip, deflate', 'Content-Type': 'application/json', 'Server-Timing': 'depproxy;dur=1761834831840', 'Via': '1.1 google', 'X-Cloud-Trace-Context': '27c3713d95b40edbcf9b6d6b7d9cad4d/3880440535471060462', 'X-Forwarded-For': '91.108.5.110, 34.117.33.233, 35.191.77.249', 'X-Forwarded-Host': 'image-gen-bot.replit.app', 'X-Forwarded-Proto': 'https', 'X-Replit-User-Bio': '', 'X-Replit-User-Id': '', 'X-Replit-User-Name': '', 'X-Replit-User-Profile-Image': '', 'X-Replit-User-Roles': '', 'X-Replit-User-Teams': '', 'X-Replit-User-Url': '', 'X-Telegram-Bot-Api-Secret-Token': 'Zx9K4mP2vN8qR5tY3wL7uH1jC6fG0bS8'}
+10-30 17:33:51
+2025-10-30 14:33:51,846 | INFO | __main__ | Body size: 485 bytes
+10-30 17:33:51
+2025-10-30 14:33:51,847 | INFO | aiohttp.access | 127.0.0.1 [30/Oct/2025:14:33:51 +0000] "POST /webhook/telegram HTTP/1.1" 200 159 "-" "-"
+10-30 17:33:51
+2025-10-30 14:33:51,848 | INFO | __main__ | Unhandled message from 742200799: 💎 Баланс
+10-30 17:33:51
+2025-10-30 14:33:51,848 | INFO | aiogram.event | Update id=126042343 is handled. Duration 0 ms by bot id=8162439685
+10-30 17:33:51
+2025-10-30 14:33:51,990 | INFO | __main__ | 📥 Incoming webhook request from 127.0.0.1
+10-30 17:33:51
+2025-10-30 14:33:51,990 | INFO | __main__ | Headers: {'Host': 'image-gen-bot.replit.app', 'Content-Length': '503', 'Accept-Encoding': 'gzip, deflate', 'Content-Type': 'application/json', 'Server-Timing': 'depproxy;dur=1761834831986', 'Via': '1.1 google', 'X-Cloud-Trace-Context': '914290253b3dea5acf9b6d6b7d9ca299/3132137038374999177', 'X-Forwarded-For': '91.108.5.110, 34.117.33.233, 35.191.77.253', 'X-Forwarded-Host': 'image-gen-bot.replit.app', 'X-Forwarded-Proto': 'https', 'X-Replit-User-Bio': '', 'X-Replit-User-Id': '', 'X-Replit-User-Name': '', 'X-Replit-User-Profile-Image': '', 'X-Replit-User-Roles': '', 'X-Replit-User-Teams': '', 'X-Replit-User-Url': '', 'X-Telegram-Bot-Api-Secret-Token': 'Zx9K4mP2vN8qR5tY3wL7uH1jC6fG0bS8'}
+10-30 17:33:51
+2025-10-30 14:33:51,990 | INFO | __main__ | Body size: 503 bytes
+10-30 17:33:51
+2025-10-30 14:33:51,991 | INFO | aiohttp.access | 127.0.0.1 [30/Oct/2025:14:33:51 +0000] "POST /webhook/telegram HTTP/1.1" 200 159 "-" "-"
+10-30 17:33:51
+2025-10-30 14:33:51,992 | INFO | __main__ | Unhandled message from 742200799: 🎨 Генерация
+10-30 17:33:51
+2025-10-30 14:33:51,992 | INFO | aiogram.event | Update id=126042344 is handled. Duration 0 ms by bot id=8162439685
+10-30 17:33:52
+2025-10-30 14:33:52,135 | INFO | __main__ | 📥 Incoming webhook request from 127.0.0.1
+10-30 17:33:52
+2025-10-30 14:33:52,135 | INFO | __main__ | Headers: {'Host': 'image-gen-bot.replit.app', 'Content-Length': '485', 'Accept-Encoding': 'gzip, deflate', 'Content-Type': 'application/json', 'Server-Timing': 'depproxy;dur=1761834832132', 'Via': '1.1 google', 'X-Cloud-Trace-Context': 'be264e5faa279c3bcf9b6d6b7d9ca13c/3062555553370281917', 'X-Forwarded-For': '91.108.5.110, 34.117.33.233, 35.191.77.251', 'X-Forwarded-Host': 'image-gen-bot.replit.app', 'X-Forwarded-Proto': 'https', 'X-Replit-User-Bio': '', 'X-Replit-User-Id': '', 'X-Replit-User-Name': '', 'X-Replit-User-Profile-Image': '', 'X-Replit-User-Roles': '', 'X-Replit-User-Teams': '', 'X-Replit-User-Url': '', 'X-Telegram-Bot-Api-Secret-Token': 'Zx9K4mP2vN8qR5tY3wL7uH1jC6fG0bS8'}
+10-30 17:33:52
+2025-10-30 14:33:52,135 | INFO | __main__ | Body size: 485 bytes
+10-30 17:33:52
+2025-10-30 14:33:52,136 | INFO | aiohttp.access | 127.0.0.1 [30/Oct/2025:14:33:52 +0000] "POST /webhook/telegram HTTP/1.1" 200 159 "-" "-"
+10-30 17:33:52
+2025-10-30 14:33:52,137 | INFO | __main__ | Unhandled message from 742200799: 💎 Баланс
+10-30 17:33:52
+2025-10-30 14:33:52,137 | INFO | aiogram.event | Update id=126042345 is handled. Duration 0 ms by bot id=8162439685
+
