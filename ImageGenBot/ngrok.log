@@ -1,0 +1,10 @@
+{"lvl":"info","msg":"no configuration paths supplied","t":"2025-11-09T23:45:46.3853696+03:00"}
+{"lvl":"info","msg":"using configuration at default config path","path":"C:\\Users\\PC\\AppData\\Local/ngrok/ngrok.yml","t":"2025-11-09T23:45:46.4431385+03:00"}
+{"err":"\u003cnil\u003e","lvl":"info","msg":"open config file","path":"C:\\Users\\PC\\AppData\\Local\\ngrok\\ngrok.yml","t":"2025-11-09T23:45:46.4543317+03:00"}
+{"addr":"127.0.0.1:4040","allow_hosts":null,"lvl":"info","msg":"starting web service","obj":"web","t":"2025-11-09T23:45:46.4902318+03:00"}
+{"lvl":"info","msg":"client session established","obj":"tunnels.session","t":"2025-11-09T23:45:46.9977212+03:00"}
+{"lvl":"info","msg":"tunnel session started","obj":"tunnels.session","t":"2025-11-09T23:45:46.9992722+03:00"}
+{"lvl":"info","msg":"update available","obj":"updater","t":"2025-11-09T23:45:47.2594545+03:00"}
+{"addr":"http://localhost:5000","lvl":"info","msg":"started tunnel","name":"command_line","obj":"tunnels","t":"2025-11-09T23:45:47.2990952+03:00","url":"https://souplike-undepreciated-warren.ngrok-free.dev"}
+{"id":"914728f20e0f926b","lvl":"info","msg":"start","pg":"/api/tunnels","t":"2025-11-10T00:28:07.7630991+03:00"}
+{"dur":"517.7µs","id":"914728f20e0f926b","lvl":"info","msg":"end","pg":"/api/tunnels","status":200,"t":"2025-11-10T00:28:07.7636168+03:00"}
